@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+
+    <style>
+        :root {
+            --bg: #0E1610;
+            --text: #e8efe9;
+            --muted: #8d9b90;
+            --accent: #b7d8bf;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Cursor Glow */
+        .cursor-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                    rgba(183, 216, 191, .06) 0%,
+                    rgba(183, 216, 191, .02) 40%,
+                    transparent 75%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left Side */
+        .sidebar {
+            width: 35%;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 5rem clamp(2rem, 8vw, 15rem);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .name h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            transition: .3s;
+        }
+
+        .name h1:hover {
+            color: var(--accent);
+        }
+
+        .education {
+            margin-top: 2rem;
+        }
+
+        .education h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .education p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* Navigation */
+        .nav {
+            margin-top: 3rem;
+        }
+
+        .nav ul {
+            list-style: none;
+        }
+
+        .nav li {
+            margin: 1rem 0;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            transition: .3s;
+        }
+
+        .nav a::before {
+            content: "-";
+            transition: .3s ease;
+            color: var(--muted);
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--accent);
+        }
+
+        .nav a:hover::before,
+        .nav a.active::before {
+            content: "────";
+            color: var(--accent);
+        }
+
+        /* Social Links */
+        .socials {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .socials a {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--muted);
+            text-decoration: none;
+            transition: .3s;
+        }
+
+        .socials a:hover {
+            color: var(--accent);
+            background: rgba(255, 255, 255, .03);
+            transform: translateY(-2px);
+        }
+
+        .socials svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Right Side */
+        .content {
+            width: 65%;
+            margin-left: 35%;
+            padding: 5rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+            padding-bottom: 4rem;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 8rem;
+        }
+
+        .experience-row {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .experience-date {
+            min-width: 120px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+
+        .experience-content {
+            flex: 1;
+        }
+
+        .company-name {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: rgba(183, 216, 191, 0.1);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .card {
+            padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 5vw, 5rem);
+
+            /* border:1px solid var(--border); */
+            border-radius: 14px;
+            margin-bottom: 1rem;
+            transition: .3s;
+        }
+
+        .card:hover {
+            border-color: rgba(183, 216, 191, .3);
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, .02);
+        }
+
+        section:has(.card:hover) .card:not(:hover) {
+            opacity: 0.5;
+        }
+
+        .card h4 {
+            margin-bottom: .5rem;
+        }
+
+        .card p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .project-card .project-title {
+            color: var(--text);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.65rem;
+        }
+
+        .project-card .project-details,
+        .project-card .project-details li {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .project-card .project-details {
+            margin-bottom: 1rem;
+            list-style: disc inside;
+        }
+
+        .project-card .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: .2s;
+            font-weight: 600;
+        }
+
+        .project-card .project-link:hover {
+            color: var(--text);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        #blogs h2 {
+            font-size: 2rem;
+            padding-left: clamp(0rem, 5vw, 5rem);
+            color: var(--text);
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        /* Mobile */
+        @media(max-width:900px) {
+
+            .experience-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .experience-date {
+                margin-top: 0;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 3rem 2rem;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .content {
+                width: 100%;
+                margin-left: 0;
+                padding: 3rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            #blogs h2 {
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor-glow"></div>
+
+    <div class="container">
+
+        <!-- LEFT -->
+        <aside class="sidebar">
+
+            <div class="name">
+                <h1>M. Irfan</h1>
+            </div>
+
+            <div class="education">
+                <h3>Education</h3>
+                <p>
+                    BS Computer Science<br>
+                    ITU, Lahore<br>
+                    2022 — 2026
+                </p>
+            </div>
+
+            <nav class="nav">
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#blogs">Blogs</a></li>
+                </ul>
+            </nav>
+
+            <div class="spacer"></div>
+
+
+            <div class="socials">
+
+                <!-- GitHub -->
+                <a href="https://github.com/smirfanshah" target="_blank" aria-label="GitHub">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.2-.02-2.17-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.69.08-.69 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.72-1.54-2.56-.29-5.25-1.28-5.25-5.71 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.07 0 0 .97-.31 3.17 1.18a10.9 10.9 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.6.23 2.78.11 3.07.74.81 1.18 1.84 1.18 3.1 0 4.44-2.69 5.42-5.26 5.71.41.35.77 1.04.77 2.1 0 1.52-.01 2.74-.01 3.11 0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
+                    </svg>
+                </a>
+
+                <!-- LinkedIn -->
+                <a href="www.linkedin.com/in/syed-m-irfan-816195247" target="_blank" aria-label="LinkedIn">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M4.98 3.5A2.48 2.48 0 1 1 5 8.46a2.48 2.48 0 0 1-.02-4.96zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.9-2 3.9-2 4.1 0 4.8 2.7 4.8 6.2V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2.1 1.4-2.1 2.8V21H9z" />
+                    </svg>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://wa.me/923247983433" target="_blank" aria-label="WhatsApp" class="social-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.26 2 11.52c0 1.85.57 3.57 1.54 5.02L2.5 22l5.65-1.48A10.2 10.2 0 0 0 12 21c5.52 0 10-4.26 10-9.48S17.52 2 12 2zm0 17.08c-1.25 0-2.47-.32-3.54-.92l-.25-.14-3.35.88.89-3.24-.16-.25a7.3 7.3 0 0 1-1.12-3.89c0-4.09 3.38-7.42 7.53-7.42s7.53 3.33 7.53 7.42-3.38 7.56-7.53 7.56zm4.14-5.62c-.23-.11-1.35-.66-1.56-.73-.21-.08-.36-.11-.51.11-.15.22-.58.73-.71.88-.13.15-.26.17-.49.06-1.35-.66-2.23-1.18-3.12-2.67-.24-.4.24-.37.69-1.24.08-.17.04-.32-.02-.44-.06-.11-.51-1.21-.7-1.66-.18-.44-.37-.38-.51-.39h-.43c-.15 0-.4.06-.61.28-.21.22-.81.79-.81 1.92s.83 2.23.95 2.38c.11.15 1.63 2.46 3.95 3.45.55.24.98.38 1.32.49.55.17 1.05.15 1.45.09.44-.07 1.35-.55 1.54-1.08.19-.53.19-.98.13-1.08-.06-.09-.21-.15-.44-.26z" />
+                    </svg>
+                </a>
+                <!-- Email -->
+                <a href="mailto:sm.iirfanshah@gmail.com" aria-label="Email">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M2 5h20v14H2V5zm10 7L4 7v10h16V7l-8 5z" />
+                    </svg>
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- RIGHT -->
+        <main class="content">
+
+            <section id="about">
+                <div class="card">
+                    <h2>About me</h2>
+                    <br>
+                    <p>
+                        Curiosity has been the driving force behind my journey into <strong>Computer Science</strong>.
+                        From struggling
+                        with the basics to experiencing the satisfaction of &ldquo;been there, done that,&rdquo; every
+                        step has shaped how I approach learning and problem-solving.
+                    </p>
+                    <br>
+                    <p>During the third and fourth year of my degree, I decided to focus my path toward Artificial
+                        Intelligence, particularly Deep Learning. Along the way, I explored areas such as
+                        <strong>Spatial Data
+                            Science</strong>, <strong>Computer Vision</strong>, <strong>Natural Language
+                            Processing</strong>, and <strong>MLOps</strong> through elective courses, which
+                        further expanded my understanding of the field and fueled my curiosity.
+                    </p>
+                    <br>
+                    <p>I am excited to continue exploring AI development and discovering where this curiosity will take
+                        me in the
+                        years ahead.</p>
+                </div>
+            </section>
+
+            <section id="experience">
+                <div class="card experience-row">
+                    <div class="experience-date">Jun 2025 — Sep 2025</div>
+                    <div class="experience-content">
+                        <h4>Computer Vision and Python Intern</h4>
+                        <div class="company-name">Intelligent Machines Lab @ ITU</div>
+                        <p>
+                            Developed and evaluated deep learning models using PyTorch and Hugging Face, including CNNs, ResNet
+                            classifiers, U-Net segmentation, and DINOv2-based medical imaging models
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">OpenCV</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="projects">
+                <div class="card experience-row">
+                    <!-- <div class="experience-date">2024</div> -->
+                    <div class="experience-content project-card">
+                        <h4 class="project-title">Urban Transit Accessibility Optimization</h4>
+                        <ul class="project-details">
+                            <li>Analyzed mobility gaps in Islamabad, identifying underserved high-density areas and designing feeder routes to Metro Bus stations.</li>
+                            <li>Processed POIs, road networks (OSMnx), and population data (WorldPop) to define high-need regions using DBSCAN clustering.</li>
+                            <li>Optimized feeder bus routes connecting 41 POIs, serving ~25,000 previously unserved residents.</li>
+                        </ul>
+                        
+                        <p><a class="project-link" href="https://github.com/smirfanshah/Clustering-high-density-unserved-populations-and-pathfinding-to-Metro-Bus-routes-for-speedo" target="_blank">View source on GitHub ↗</a></p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">OSMnx</span>
+                            <span class="tech-tag">GeoPandas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card experience-row project-card">
+                    <!-- <div class="experience-date">2023</div> -->
+                    <div class="experience-content">
+                        <h4 class="project-title">AI Study Assistant</h4>
+                        <ul class="project-details">
+                            <li>Built a full-stack AI study assistant for PDF upload, summary generation, flashcards, and quizzes.</li>
+                            <li> Implemented Mastery Mode to track progress and interactive Chat with PDF for document-specific Q/A.</li>
+                        </ul>
+                        <p><a class="project-link" href="https://github.com/hamxaShaukat/ai-study-helper" target="_blank">View source on GitHub ↗</a></p>
+
+                        <div class="tech-stack">
+                            <span class="tech-tag">Next.js</span>
+                            <span class="tech-tag">Firebase</span>
+                            <span class="tech-tag">TypeScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card experience-row project-card">
+                    <!-- <div class="experience-date">2023</div> -->
+                    <div class="experience-content">
+                        <h4 class="project-title">Pakistan History RAG System</h4>
+                        <ul class="project-details">
+                            <li> Built a RAG-based QA system using semantic search, confidence-based routing, and web fallback for Pakistan’s history.</li>
+                            <li> Used Pinecone vector search, LLaMA 3.1 via Groq, and Gradio for interactive deployment.</li>
+                        </ul>
+                        <p><a class="project-link" href="https://github.com/smirfanshah/Pakistan-History-Chatbot" target="_blank">View source on GitHub ↗</a></p>
+
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Pinecone</span>
+                            <span class="tech-tag">LLaMA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card experience-row project-card">
+                    <!-- <div class="experience-date">2023</div> -->
+                    <div class="experience-content">
+                        <h4 class="project-title">What is an Object?</h4>
+                        <ul class="project-details">
+                            <li> Implemented the classical "What Is an Object?" objectness detection framework from scratch by translating research concepts into a complete software pipeline.</li>
+                            <li> Developed and integrated multiple objectness cues, including Multi-scale Saliency, Superpixel Straddling, and Edge Density, into a unified object proposal generation framework.</li>
+                            <li> Designed a modular pipeline to independently validate and integrate each detection component, ensuring robust and maintainable implementation.</li>
+                            <li> Applied Bayesian Optimization to automatically tune model parameters using Intersection over Union (IoU) with ground-truth bounding boxes as the optimization objective.</li>
+                            <li> Evaluated and optimized the trade-off between proposal quality and computational efficiency through systematic parameter tuning and performance analysis.</li>
+
+                        </ul>
+                        <!-- <p><a class="project-link" href="https://github.com/hamxaShaukat/ai-study-helper" target="_blank">View source on GitHub ↗</a></p> -->
+
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">OpenCV</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- <section id="blogs">
+                <h2>Blogs</h2>
+                <div class="card experience-row">
+                    <div class="experience-content">
+                        <h4>Understanding Computer Vision Systems</h4>
+                        <p>
+                            Thoughts and learnings from building AI products.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card experience-row">
+                    <div class="experience-content">
+                        <h4>MLOps for Students</h4>
+                        <p>
+                            A practical guide to training, tracking and deploying models.
+                        </p>
+                    </div>
+                </div>
+            </section> -->
+
+        </main>
+
+    </div>
+
+    <script>
+        const glow = document.querySelector(".cursor-glow");
+
+        window.addEventListener("mousemove", (e) => {
+            glow.style.left = e.clientX + "px";
+            glow.style.top = e.clientY + "px";
+        });
+
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav a");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove("active");
+                        if (link.getAttribute("href").substring(1) === entry.target.id) {
+                            link.classList.add("active");
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(sec => observer.observe(sec));
+    </script>
+
+</body>
+
+</html>
